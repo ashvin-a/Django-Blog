@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My Blog{% endblock title %}
+{% block css_file %}
+<link rel="stylesheet" href="{% static "blog/index.css"%}">
+{% endblock css_file %}
+
+{% block content %}
+    <header id="main-navigation">
+        <h1><a href="">Blah Blog</a></h1>
+        <nav>
+            <a href="">All Posts</a>
+        </nav>
+    </header>
+
+    <section id="welcome">
+        <header>
+            <img src="{%static "blog/images/cat.jpg"%}" alt="Blahhahahaha">
+            <h2>Blah's Blog</h2>
+        </header>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio eius ullam repellendus soluta tempore dolores laudantium natus, veniam nobis possimus eaque, inventore consequatur voluptatibus quisquam.</p>
+    </section>
+
+    <section id="latest-posts">
+        <h2>My Latest Kalaaviruthu</h2>
+        <ul>
+            <li>
+                <article class="post">
+                    <a href="">
+                        <img src="{%static "blog/images/cat2.avif"%}" alt="">
+                        <div class="post__content">
+                            <h3>
+                                Mountain hiking
+                            </h3>
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quae eligendi harum vero, fuga velit dolorum ducimus molestiae, ipsam sit odio vitae hic amet ratione.
+                            </p>
+                        </div>
+                    </a>
+
+                </article>
+            </li>
+        </ul>
+    </section>
+
+    <section id="about">
+        <h2>
+            Njan etha?  
+        </h2>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias eius velit veniam voluptate nesciunt enim eum ipsa iure minima. Commodi tempora nesciunt nihil quis alias possimus officiis, repellendus soluta. Libero cupiditate incidunt fugit neque iure reiciendis eum adipisci quia! Et illo ex laborum eaque autem quas quo voluptates expedita recusandae!
+        </p>
+    </section>
+{% endblock content %}

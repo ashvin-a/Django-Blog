@@ -38,3 +38,6 @@ class Comment(models.Model):
     user_email = models.EmailField()
     text = models.TextField(max_length=400)
     post = models.ForeignKey(PostModel,on_delete=models.SET_NULL,null=True,related_name='comments')
+
+    def __str__(self) -> str:
+        return f"{self.text}"

@@ -1,4 +1,8 @@
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView
+from django.shortcuts import render
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.views import View
 from .models import PostModel
 from .forms import CommentForm
 # Create your views here.
@@ -25,15 +29,35 @@ class AllPosts(ListView):
         query = super().get_queryset()
         return query
         
-class SinglePost(DetailView):
+class SinglePost(View):
     
-    template_name = 'blog/post-detail.html'
-    model = PostModel
-    context_object_name = 'post'
+    def get(self,request,slug):
+        post = PostModel.objects.get(slug=slug) 
+        return render(request,'blog/post-detail.html',{
+            'post':post,
+            'tag':post.tag.all(),
+            'comment_form':CommentForm(),
+            'comments':post.comments.all().order_by('-id')
+        })
+    
+    def post(self,request,slug):
+        comment_form = CommentForm(request.POST)
+        post = PostModel.objects.get(slug=slug)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['comment_form'] = CommentForm()
-        context["tags"] = self.object.tag.all() 
-        return context
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.save()
+            #Here we take the data from user, adds our post 
+            #relation from our side, then updates the db.
+            return HttpResponseRedirect(reverse('post-detail-page',args=[slug]))
+
+        return render(request,'blog/post-detail.html',{
+            'post':post,
+            'tag':post.tag.all(),
+            'comment_form': comment_form, #Ivide kodukunna saadanam ella                    nokkim kandum kodukkane 💀
+            'comments':post.comments.all().order_by('-id')
+
+        })
+
     

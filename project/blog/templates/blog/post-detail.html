@@ -9,6 +9,14 @@
 {% endblock css_file %}
 
 {% block content %}
+{% if comment_form.errors %}
+<div id="alert">
+    <h2>
+        Nookim kandum form fill cheyy......error adichu🚶🏼
+    </h2>
+    <a href="#comment-form">Fix</a>
+</div>
+{% endif %}
 <section id="summary">
     <h2>{{post.title}}</h2>
     <div>
@@ -27,12 +35,21 @@
 <main>
     {{post.content|linebreaks}}
 </main>
-<div>
-    <form action="/comment" method="POST" id="comment-form">
+<div id="comments">
+    {% for comment in comments %}
+    <li>
+        <h2>{{comment.user_name}}</h2>
+        {% comment %} {{comment.user_email}}{% endcomment %}
+        <p>{{comment.text|linebreaks}}</p>
+    </li>
+    {% endfor %}
+</div>
+<div id="comment-form">
+    <form action="{%url 'post-detail-page' post.slug %}" method="POST" >
         {% csrf_token %}
         <h2>Your Comment</h2>
         {% for form_field in comment_form %}
-            <div class="form-control">
+            <div class="form-control {% if form_field.errors %} invalid {% endif %}">
                 {{form_field.label_tag}}
                 {{form_field}}
                 {{form_field.errors}}

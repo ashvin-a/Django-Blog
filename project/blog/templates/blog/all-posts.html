@@ -10,13 +10,9 @@
     <section id="all-posts">
         <h2>My Collections</h2>
         <ul>
-            {%include "blog/includes/posts.html"%}
-            {%include "blog/includes/posts.html"%}
-            {%include "blog/includes/posts.html"%}
-            {%include "blog/includes/posts.html"%}
-            {%include "blog/includes/posts.html"%}
-            {%include "blog/includes/posts.html"%}
-            {%include "blog/includes/posts.html"%}
+            {% for post in posts %}
+                {%include "blog/includes/posts.html"%}
+            {% endfor %}
         </ul>
     </section>
 {% endblock content %}

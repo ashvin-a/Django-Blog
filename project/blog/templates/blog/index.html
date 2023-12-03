@@ -9,7 +9,7 @@
 {% block content %}
     <section id="welcome">
         <header>
-            <img src="{%static "blog/images/cat.jpg"%}" alt="Blahhahahaha">
+            <img src="{%static "blog/images/cat5.jpg"%}" alt="Blahhahahaha">
             <h2>Blah's Blog</h2>
         </header>
         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio eius ullam repellendus soluta tempore dolores laudantium natus, veniam nobis possimus eaque, inventore consequatur voluptatibus quisquam.</p>
@@ -18,7 +18,9 @@
     <section id="latest-posts">
         <h2>My Latest Kalaaviruthu</h2>
         <ul>
-            {%include "blog/includes/posts.html"%}
+            {% for post in posts %}
+                {%include "blog/includes/posts.html"%}
+            {% endfor %}
         </ul>
     </section>
 

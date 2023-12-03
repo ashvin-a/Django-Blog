@@ -19,7 +19,6 @@ class AuthorModel(models.Model):
 
     def __str__(self) -> str:
         return self.full_name()
-        
 
 class PostModel(models.Model):
     title = models.CharField(max_length=50)
@@ -33,3 +32,9 @@ class PostModel(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title} by {self.author}"
+
+class Comment(models.Model):
+    user_name = models.CharField(max_length=120)
+    user_email = models.EmailField()
+    text = models.TextField(max_length=400)
+    post = models.ForeignKey(PostModel,on_delete=models.SET_NULL,null=True,related_name='comments')

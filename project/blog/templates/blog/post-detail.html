@@ -12,8 +12,8 @@
 <section id="summary">
     <h2>{{post.title}}</h2>
     <div>
-    {%for tag in tags%}
-            <span>{{tag.caption}}</span>
+        {%for tag in tags%}    
+    <span><div class="tag">{{tag.caption}}</div></span>
     {% endfor %}
     </div>
     <article>
@@ -27,4 +27,18 @@
 <main>
     {{post.content|linebreaks}}
 </main>
+<div>
+    <form action="/comment" method="POST" id="comment-form">
+        {% csrf_token %}
+        <h2>Your Comment</h2>
+        {% for form_field in comment_form %}
+            <div class="form-control">
+                {{form_field.label_tag}}
+                {{form_field}}
+                {{form_field.errors}}
+            </div>
+        {% endfor %}
+        <button>Submit</button>
+    </form>
+</div>
 {% endblock content %}

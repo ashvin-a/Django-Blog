@@ -46,7 +46,12 @@ body {
   #summary address {
     font-weight: bold;
   }
-  
+
+  #summary a{
+    text-decoration: none;
+    color: white;
+  }
+
   #summary time {
     font-weight: bold;
   } 

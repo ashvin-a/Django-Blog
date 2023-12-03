@@ -35,7 +35,7 @@ class SinglePost(View):
         post = PostModel.objects.get(slug=slug) 
         return render(request,'blog/post-detail.html',{
             'post':post,
-            'tag':post.tag.all(),
+            'tags':post.tag.all(),
             'comment_form':CommentForm(),
             'comments':post.comments.all().order_by('-id')
         })
@@ -54,10 +54,40 @@ class SinglePost(View):
 
         return render(request,'blog/post-detail.html',{
             'post':post,
-            'tag':post.tag.all(),
+            'tags':post.tag.all(),
             'comment_form': comment_form, #Ivide kodukunna saadanam ella                    nokkim kandum kodukkane 💀
             'comments':post.comments.all().order_by('-id')
 
         })
+
+class ReadLater(View):
+
+    def get(self,request):
+        stored_post = request.session.get('stored_posts')
+
+        context = {}
+        if stored_post is None:
+            context['posts'] = []
+            context['has_posts'] = False
+        else:
+            posts = PostModel.objects.filter(id__in=stored_post)
+            context['posts'] = posts
+            context['has_posts'] = True
+        
+        return render(request,'blog/stored-posts.html',context)
+
+
+
+    def post(self,request):
+        stored_post = request.session.get('stored_posts')
+
+        if stored_post is None:
+            stored_post = []
+        post_id = request.POST['post_id'] # form name = post_id
+        if post_id not in stored_post:
+            stored_post.append(post_id)
+            request.session['stored_posts'] = stored_post #This block of code is dicey.
+        return HttpResponseRedirect('/')
+        
 
     

@@ -31,13 +31,24 @@ class AllPosts(ListView):
         
 class SinglePost(View):
     
+    def is_stored_post(self,request,post_id):
+        stored_post = request.session.get('stored_posts')
+        if stored_post is not None:
+            is_saved = post_id in stored_post 
+        else:
+            is_saved = False
+              
+        return is_saved
+    
     def get(self,request,slug):
         post = PostModel.objects.get(slug=slug) 
+                
         return render(request,'blog/post-detail.html',{
             'post':post,
             'tags':post.tag.all(),
             'comment_form':CommentForm(),
-            'comments':post.comments.all().order_by('-id')
+            'comments':post.comments.all().order_by('-id'),
+            'is_saved':self.is_stored_post(request,post.id)
         })
     
     def post(self,request,slug):
@@ -56,8 +67,8 @@ class SinglePost(View):
             'post':post,
             'tags':post.tag.all(),
             'comment_form': comment_form, #Ivide kodukunna saadanam ella                    nokkim kandum kodukkane 💀
-            'comments':post.comments.all().order_by('-id')
-
+            'comments':post.comments.all().order_by('-id'),
+            'is_saved':self.is_stored_post(request,post.id)
         })
 
 class ReadLater(View):
@@ -66,7 +77,7 @@ class ReadLater(View):
         stored_post = request.session.get('stored_posts')
 
         context = {}
-        if stored_post is None:
+        if stored_post is None or len(stored_post) == 0:
             context['posts'] = []
             context['has_posts'] = False
         else:
@@ -83,10 +94,15 @@ class ReadLater(View):
 
         if stored_post is None:
             stored_post = []
-        post_id = request.POST['post_id'] # form name = post_id
+        post_id = int(request.POST['post_id']) # form name = post_id
+        
         if post_id not in stored_post:
             stored_post.append(post_id)
-            request.session['stored_posts'] = stored_post #This block of code is dicey.
+        else:
+            stored_post.remove(post_id)
+            
+        request.session['stored_posts'] = stored_post #This block of code is dicey.
+        
         return HttpResponseRedirect('/')
         
 
